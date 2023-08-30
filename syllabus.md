@@ -23,9 +23,9 @@ GSI Office hours
 Important websites
 ------------------
 
--  [Canvas site](https://stats604.org). We will use Canvas to manage assignment submissions, peer review, and grading. For all other course-related matters, please use Slack.
+-  [Canvas site](https://umich.instructure.com/courses/615718). We will use Canvas to manage assignment submissions, peer review, and grading. For all other course-related matters, please use Slack.
 -  [Slack channel](https://um-fa23-stats604.slack.com/ssb/signin_redirect?s=1&v=4.33.90&ssb_vid=.ac1db12833a48f1c7484fd5df3b39cae&ssb_instance_id=72737c8c-61fd-4c29-80c8-97a72b6f37a8). Please post any sort of questions about the homework assignments, projects, exams, and/or lectures to Slack, so other members of the class can view the responses and participate. My response time to Slack DMs is generally better than to e-mails.
--   Github repository. Lab materials and slides will be posted here.
+-   [Github repository](https://github.com/stats604/stats604). Lab materials and slides will be posted here.
 
 What this class is about
 ------------------------
