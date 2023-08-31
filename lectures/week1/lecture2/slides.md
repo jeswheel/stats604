@@ -46,13 +46,41 @@ One of the most important challenges in all of science is **understanding the ge
 ![mendelian trait](https://upload.wikimedia.org/wikipedia/commons/1/17/Punnett_square_mendel_flowers.svg)
 (Wikipedia)
 
++++
+
+# Classical genetics
+https://www.khanacademy.org/science/high-school-biology/hs-classical-genetics/hs-introduction-to-heredity/a/probabilities-in-genetics
+![image.png](attachment:image.png)
+
 +++ {"slideshow": {"slide_type": "slide"}}
 
-- The simplest traits behave like Mendel's peas.
+## Mendelian traits
+- The simplest traits behave like Mendel's peas:
+    - Lactase persistence
+    - Albinism
+    - Huntington's disease
+    - ([Full list](https://en.wikipedia.org/wiki/Mendelian_traits_in_humans)])
+
++++ {"slideshow": {"slide_type": "fragment"}}
+
 - However, many traits have a much more complex "architecture", and are affected by thousands of genetic variants scattered throughout the genome.
+
++++ {"slideshow": {"slide_type": "slide"}}
+
 - Height is one such example; schizophrenia is another.
 
 ![image-2.png](attachment:image-2.png)
+
++++ {"slideshow": {"slide_type": "slide"}}
+
+## GWAS
+- If we have gene sequences from many different people ($X$), as well as corresponding trait information ($y$), we might try regression to understand the genetic architecture:
+
+$$\underbrace{y}_{\text{height, disease status, etc.}} = \underbrace{\mathbf{X}}_{\text{genotype}}\cdot \beta + \epsilon$$
+
+- This is called a **genomewide association study** (GWAS).
+- GWAS explains the primary effect of DNA mutations on phenotypes of interest.
+- However, the picture is more complicated...
 
 +++ {"slideshow": {"slide_type": "slide"}}
 
@@ -65,22 +93,16 @@ How does genetic code translate into phenotype (observable trait)? This is calle
 
 +++ {"slideshow": {"slide_type": "slide"}}
 
-## GWAS
-- If we have gene sequences from many different people ($X$), as well as corresponding trait information ($y$), we might try regression to understand the genetic architecture:
-
-$$\underbrace{y}_{\text{height, disease status, etc.}} = \underbrace{\mathbf{X}}_{\text{genotype}}\cdot \beta + \epsilon$$
-
-- This is called a **genomewide association study** (GWAS).
-- GWAS can successfully pinpoint the genetic origins of some traits, especially if they have a "simple" architecture.
-- However, it fails to explain heritability of many other 
-
-+++ {"slideshow": {"slide_type": "slide"}}
-
 ## The central dogma
 
 Notice in the above figure that there is a step (in fact, multiple steps) "between" the genetic code and the ultimate phenotype. In fact the process by which "your code" becomes "you" is quite complicated. It is known as the **central dogma of molecular biology**:
 
-$$\text{DNA} \longrightarrow \text{RNA} \longrightarrow \text{protein}$$
+$$\text{DNA} \longrightarrow \text{RNA} \longrightarrow \text{protein} (\longrightarrow \cdots \longrightarrow \text{trait})$$
+
+### Variation in the steps along this pathway generates all<sup>*</sup> the diversity of life.
+
+
+<span style="font-size: 80%">*: Environmental factors also play a role.</span>
 
 +++ {"slideshow": {"slide_type": "slide"}}
 
@@ -127,6 +149,7 @@ is highly regulated.
 * Understanding how gene expression works is key to further understand how complex traits evolve and are governed.
     - Many diseases, including certain cancers, are driven by changes in gene expression.
     - By knowing which genes are turned on or off by a particular treatment, researchers can develop more targeted and effective drugs.
+* Despite a two centuries of progress, **we still know surprisingly little about the architecture of the genome**.
 
 +++ {"slideshow": {"slide_type": "slide"}}
 
