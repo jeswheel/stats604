@@ -1,9 +1,8 @@
 ---
-title: "Week 4 Lab"
+title: "Week 5 Lab"
 output:
   learnr::tutorial:
     progressive: true
-    allow_skip: true
 runtime: shiny_prerendered
 ---
 
@@ -93,6 +92,74 @@ This idea has been around longer than instrumental variable regression, but it t
 
 ## Instrumental Variable Regression Implementation
 
+Now let's try doing instrumental variable regression with a real data set. 
+This example will continue with a model that was described in Chapter 9.5; 
+This model was used by Rindfuss et al to make inference about a woman's education level (ED) and age at first birth (AGE). 
+The model uses the following simultaneous equations: 
+$$
+\mathrm{ED} = a_0 + a_1\mathrm{AGE} + a_2\mathrm{OCC}_i + a_3\mathrm{RACE}_i + \ldots + a_{10}\mathrm{YCIG}_i + \delta_i
+$$
+$$
+\mathrm{AGE} = b_0 + b_1\mathrm{ED} + b_2\mathrm{FEC}_i + b_3\mathrm{RACE}_i + \ldots + b_{10}\mathrm{YCIG}_i + \epsilon_i
+$$
+
+Descriptions of all of the variables are given in the table below.
+
+<center>
+
+![Table of variable descriptions](images/variableDescription.png){width=80%}
+
+</center>
+
+Your mission, should you choose to accept it, is to estimate parameters in the standardized equations that explain ED and AGE. 
+
+While we don't have access to the original dataset, we do have access to the correlation matrix for each of the standardized variables (so that the columns were mean 0 and variance 1 before the correlation was calculated). The correlations of the first 6 variables are printed below: 
+
+```{r}
+tmp <- read.table('data/rindcor.dat') |> as.matrix()
+COV <- tmp + t(tmp) - diag(nrow(tmp))
+colnames(COV) <- c("OCC", "RACE", "NOSIB", "FARM", "REGN", "ADOLF",
+                   "REL", "YCIG", "FEC", "ED", "AGE")
+rownames(COV) <- colnames(COV)
+COV[1:6, 1:6]
+```
+
+As a reminder, here is the eqation to estimate the coefficients: 
+
+$$
+\hat{\beta}^{IVLS} = \big(X^TZ(Z^TZ)^{-1}Z^TX\big)^{-1}X^TZ(Z^TZ)^{-1}Z^TY
+$$
+```{r IVLS, exercise=TRUE, exercise.lines=20}
+# Read in the data 
+tmp <- read.table('data/rindcor.dat') |> as.matrix()
+COV <- tmp + t(tmp) - diag(nrow(tmp))  # remove zeros 
+
+# Name columns and rows
+colnames(COV) <- c("OCC", "RACE", "NOSIB", "FARM", "REGN", "ADOLF",
+                   "REL", "YCIG", "FEC", "ED", "AGE")
+rownames(COV) <- colnames(COV)
+
+# TODO: get IVLS estimate
+```
+
+```{r IVLS-hint-1}
+# It's helpful to create a named vector to select columns that you want, something like this: 
+z_cols <- c(
+  'FEC', 'RACE', "NOSIB", "FARM",
+  "REGN", "ADOLF", "REL", "YCIG", 'OCC'
+  )
+```
+
+```{r IVLS-hint-2}
+# Because the columns were standardized, the correlation between 
+# various columns can be a useful matrix product. 
+```
+
+### Follow up questions: 
+
+- Rindfuss et al results are printed in the back of the Freedman textbook. Did you get the same coefficients that they reported? Are they close? If not, why might they be different? 
+- What about model assumptions? Do they make sense for this data / model? 
+- Consider estimating the SE of the estimates. HINT: use equation 9.14 from the textbook. 
 
 ## HW / Project Questions
 
