@@ -1,0 +1,139 @@
+---
+title: "Lab 6"
+author: "Jesse Wheeler"
+date: "`r Sys.Date()`"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Today's plan
+
+1. Announcements 
+1. Bootstrap   
+1. HW / Project Questions 
+
+## Announcments
+
+## Boostrap: Formal Introduction
+
+Let $X_1, X_2, \ldots, X_n$ be i.i.d. random variables from some unknown distribution $Q$. 
+For convenience, we denote all observations by the vector $X_{1:n} = (X_1, \ldots, X_n)$. 
+
+We don't need to make any assumptions about $Q$. For arbitrary $Q$, the *empirical distribution* $\widehat{Q}$ is a natural estimate of $Q$:
+$$
+\widehat{Q} = \frac{1}{n}\sum_{i = 1}^n \delta_{X_i},
+$$
+where $\delta_x$ represents a point mass at $x$. 
+
+Note that $\widehat{Q}$ is a valid probability distribution; it is a discrete distribution that assigns mass $1/n$ to each data point $X_i$, and $\widehat{Q}$ is the proportion of these values that lie in $A$: 
+$$
+\widehat{Q}(A) = \frac{1}{n}\left|\{i \leq n: X_i \in A\}\right|. 
+$$
+By the law of large numbers, $\widehat{Q} \rightarrow Q(A)$ in probability. 
+
+Now suppose that we are interested in a parameter $\theta$ of this distribution: $\theta = \theta(Q)$ (for example, the mean, median, variance, etc). 
+Let $\widehat{\theta} = \widehat{\theta}(X_{1:n})$ be an estimate of $\theta$. 
+
+We are almost always interested in how good our estimate is.
+One way to quantify this is to consider the distribution of $\widehat{\theta} - \theta$. 
+This distribution contains information about our estimate, including the bias and variance. Because the error distribution depends on $Q$, which is unknown, we unfortunately can't say much about $\widehat{\theta} - \theta$.
+
+This is where bootstrap comes into play: Because $\widehat{Q} \rightarrow Q$, it's reasonable to think that the error distribution may be similar to the error distribution using samples drawn from $\widehat{Q}$. 
+
+Given the original data $X_{1:n}$, let $X_{1:n}^*$ denote a bootstrap sample. Then
+
+$$
+X_{1:n}^*|X_{1:n} \sim \widehat{Q}
+$$
+and $X_{1:n}^*$ can be drawn by taking samples from $X_{1:n}$ with replacement. We then can make estimates:
+$$
+\widehat{\theta}^* = \widehat{\theta}(X_{1:n}^*),
+$$
+and the distribution $\widehat{\theta}^* - \widehat{\theta}$ can be used to estimate $\widehat{\theta} - \theta$. 
+
+## Bias Reduction 
+
+The bootstrap technique is often used to estimate parameter uncertainty. 
+It has various other uses, however, including *bias reduction*. 
+
+Let $Q$ be the unknown, arbitrary distribution from which we get our data (parameter or non-parametric). Then define the *bias* $b$ as:
+$$
+b = b(Q) = E_Q[\widehat{\theta} - \theta]
+$$
+If the bias were known, then $\widetilde{\theta} = \widehat{\theta} - b$ would be an un-biased estimator for $\theta$. 
+Note that the true bias depends only on the error distribution.
+Therefore let's substitute the bootstrap estimate for the error distribution: 
+$$
+\widehat{b} = E[\widehat{\theta}^* - \widehat{\theta} | X_{1:n}]
+$$
+Now we can make a new estimator $\widetilde{\theta}^*$:
+
+$$
+\widetilde{\theta}^* = \widehat{\theta} - \widehat{b}
+$$
+
+Then $\widetilde{\theta}^*$ is generally less biased than $\widehat{\theta}$. 
+
+In practice, $\widehat{b}$ can be well-approximated using the law of large numbers: 
+$$
+\widehat{b} \approx \frac{1}{B}\sum_{i = 1}^B [\widehat{\theta}_i^* - \widehat{\theta}],
+$$
+where $\widehat{\theta}_i^* = \widehat{\theta}(X^*_{1:n, i})$ is the estimate from the $i$th bootstrap sample $X^*_{1:n, i}$, and $B$ is the number of samples. 
+
+### Example: Estimating $\theta = \mu^3$
+
+Let $\mu = EX_i$, and consider estimating $\mu^3$. Because the sample mean is an un-biased estimator of $\mu$, a natural estimator of $\mu^3$ is $\bar{X}^3$. 
+
+Let $\sigma^2 = Var(X_i)$, and $\gamma = E(X_i - \mu)^3$. Using independence and the properties of expectations, it is easy to show that
+
+$$
+E(\bar{X} - \mu)^2 = \frac{\sigma^2}{n}, \, \text{ and } E(\bar{X} - \mu)^3 = \frac{\gamma}{n^2},
+$$
+Therefore
+\begin{align}
+E\bar{X}^3 &= E(\bar{X} - \mu + \mu)  \\
+&= E\left[\mu^3 + 3\mu^2(\bar{X} - \mu) + 3\mu(\bar{X} - \mu)^2 + (\bar{X} - \mu)^3\right] \\
+&= \mu^3 + \frac{3\mu\sigma^2}{n} + \frac{\gamma}{n^2}.
+\end{align}
+Therefore taking differences tells use that the bias of our estimator $\widehat{\theta} = \bar{X}^3$ as bias: 
+$$
+b = b(Q) = \widehat{\theta} - \theta = \frac{3\mu\sigma^2}{n} + \frac{\gamma}{n^2} = O(1/n).
+$$
+Doing the same thing, but now substituting $\widehat{Q}$ for the distribution $Q$, so that
+$$
+\widehat{\sigma}^2 = E_{\widehat{Q}}(X_i - \bar{X})^2 = \frac{1}{n}\sum_{i = 1}^n (X_i - \bar{X})^2,
+$$
+
+and 
+
+$$
+\widehat{\gamma} = E_{\widehat{Q}}(X_i - \bar{X})^3 = \frac{1}{n}\sum_{i = 1}^n (X_i - \bar{X})^3
+$$
+
+Then similar calculations to those that we did before gives:
+$$
+\widehat{b} = \frac{3\bar{X}\widehat{\sigma}^2}{n} + \frac{\widehat{\gamma}}{n^2}. 
+$$
+Therefore our biased-reduced estimator is:
+$$
+\widetilde{\theta} = \widehat{\theta} - \widehat{b} = \bar{X}^3 - \frac{3\bar{X}\widehat{\sigma}^2}{n} + \frac{\widehat{\gamma}}{n^2}.
+$$
+To check the bias of our new estimator, we now need to consider $E[\widetilde{\theta}]$. 
+This isn't too difficult, but it does involve many tedious calculations that we don't really want to spend time covering here. 
+The result of the calculation is: 
+
+$$
+E[\widetilde{\theta}] = \mu^3 + \frac{3}{n^2}(\mu\sigma^2 - \gamma) + \frac{6\gamma}{n^3} - \frac{2\gamma}{n^4} = \mu^3 + O\left(\frac{1}{n^2}\right)
+$$
+And therefore the bias of the adjusted estimator is of order $1/n^2$, rather than $1/n$. 
+
+## CLT and Boostrap Accuracy
+
+## Parametric Bootsrap 
+
+## HW / Project Questions
+
+We will treat this time as an extra set of office hours. 
