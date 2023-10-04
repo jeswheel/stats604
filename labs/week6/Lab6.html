@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Jesse Wheeler" />
-  <meta name="date" content="2023-10-02" />
+  <meta name="date" content="2023-10-04" />
   <title>Lab 6</title>
   <style type="text/css">
 code{white-space: pre-wrap;}
@@ -398,7 +398,7 @@ list-style-type: none;
   <p class="author">
 Jesse Wheeler
   </p>
-  <p class="date">2023-10-02</p>
+  <p class="date">2023-10-04</p>
 </div>
 <div id="todays-plan" class="slide section level2">
 <h1>Today’s plan</h1>
@@ -411,6 +411,10 @@ Jesse Wheeler
 </div>
 <div id="announcments" class="slide section level2">
 <h1>Announcments</h1>
+<ul>
+<li>Project 2: Due today</li>
+<li>Homework 2: Due Sunday</li>
+</ul>
 </div>
 <div id="boostrap-formal-introduction" class="slide section level2">
 <h1>Boostrap: Formal Introduction</h1>
@@ -426,7 +430,7 @@ of <span class="math inline">\(Q\)</span>: <span class="math display">\[
 a point mass at <span class="math inline">\(x\)</span>.</p>
 <p>Note that <span class="math inline">\(\widehat{Q}\)</span> is a valid
 probability distribution; it is a discrete distribution that assigns
-mass <span class="math inline">\(1/n\)</span> to each data point <span class="math inline">\(X_i\)</span>, and <span class="math inline">\(\widehat{Q}\)</span> is the proportion of these
+mass <span class="math inline">\(1/n\)</span> to each data point <span class="math inline">\(X_i\)</span>; for any set <span class="math inline">\(A\)</span>, <span class="math inline">\(\widehat{Q}(A)\)</span> is the proportion of these
 values that lie in <span class="math inline">\(A\)</span>: <span class="math display">\[
 \widehat{Q}(A) = \frac{1}{n}\left|\{i \leq n: X_i \in A\}\right|.
 \]</span> By the law of large numbers, <span class="math inline">\(\widehat{Q} \rightarrow Q(A)\)</span> in
@@ -533,9 +537,79 @@ O\left(\frac{1}{n^2}\right)
 </div>
 <div id="clt-and-boostrap-accuracy" class="slide section level2">
 <h1>CLT and Boostrap Accuracy</h1>
+<p>Bootstrap confidence intervals are so useful because they do not
+require many assumptions. They also enable us to obtain confidence
+intervals when an analytic confidence intervals are intractable.</p>
+<p>The important question that is worth considering is how well a
+boot-strap confidence interval actually is. Unfortunately it is
+difficult to make any statements about a general boot strap confidence
+interval. Fortunately, there are a few cases were we can make
+theoretical comparisons to other types of confidence intervals.</p>
+<p>As before, assume <span class="math inline">\(X_{1:n}\)</span> are
+i.i.d. observations from any arbitrary distribution <span class="math inline">\(Q\)</span>. Consider estimating <span class="math inline">\(\theta = E[X_i]\)</span>, letting <span class="math inline">\(\widehat{\theta} = \bar{X}_{n}\)</span>.
+Furthermore, let <span class="math inline">\(\sigma^2 =
+Var(X_i)\)</span>, and: <span class="math display">\[
+\widehat{\sigma}^2 = \frac{1}{n}\sum_{i = 1}^n (X_i - \bar{X}_{n})^2,
+\]</span> which is the variance of the empirical distribution <span class="math inline">\(\widehat{Q}_n\)</span>. Finally, let <span class="math inline">\(\gamma = E(X_i - \theta)^3\)</span>.</p>
+<p>If <span class="math display">\[
+Z_n = \frac{\sqrt{n}(\widehat{\theta} - \theta)^2}{\sigma},
+\]</span> then by the CLT, <span class="math inline">\(P(Z_n \leq x) =
+\Phi(x) + O\left(\frac{1}{\sqrt{n}}\right)\)</span>.</p>
+<p>One way to prove the CLT is by the use of a second degree Taylor
+series approximation. What happens if we approximate using an additional
+term of the Taylor polynomial? This is known as the <em>Edgeworth
+Expansion</em>, and gives a better approximation of the CLT: <span class="math display">\[
+P(Z_n \leq x) = \Phi(x) - \frac{\gamma(x^2 -
+1)}{6\sigma^3\sqrt{n}}\phi(x) + o\left(\frac{1}{\sqrt{n}}\right)
+\]</span> Obviously this isn’t as useful as the CLT because it requires
+us to know <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\sigma^3\)</span>, which are generally unknwon. We
+can, however, use this to compare to the accuracy of the boot-strap
+estimator.</p>
+<p>Let <span class="math display">\[
+Z_n^* = \frac{\sqrt{n}(\widehat{\theta}^* -
+\widehat{\theta})}{\widehat{\sigma}_n}.
+\]</span> Theorem 19.4 of Theoretical Statistics: Topics for a Core
+Course (Robert Keener) gives the following result: <span class="math display">\[
+P(Z^*_n \leq x|X_{1:n}) = \Phi(x) - \frac{\gamma(x^2 -
+1)}{6\sigma^3\sqrt{n}}\phi(x) + o_p\left(\frac{1}{\sqrt{n}}\right)
+\]</span></p>
+<p>What does this mean? One implication is that the bootstrap estimate
+for the confidence interval of the estimate of the mean of a
+non-parametric distribution is an improvement over the CLT.</p>
+<p>For more results on the performance of bootstrap estimates, see
+Chapter 19 of Keener.</p>
 </div>
 <div id="parametric-bootsrap" class="slide section level2">
 <h1>Parametric Bootsrap</h1>
+<p>There are several different version of bootstrap confidence
+intervals. One version is call the <em>parametric bootstrap</em>. In
+this case, we assume the data are i.i.d. from a distribution <span class="math inline">\(Q\)</span> that is a member of a parametric family
+<span class="math inline">\(\{Q_\lambda:\lambda \in \Lambda\}\)</span>,
+where <span class="math inline">\(\Lambda\)</span> is the set of
+possible parameter values.</p>
+<p>Because in this case we know (or assume) the family of distribution
+of <span class="math inline">\(Q\)</span>, our bootstrap distribution
+<span class="math inline">\(\widehat{Q} =
+Q_{\widehat{\lambda}}\)</span>, where <span class="math inline">\(\widehat{\lambda}\)</span> is the maximum
+likelihood estimator of <span class="math inline">\(\lambda\)</span>.
+Then, the approach is similar to before. Let <span class="math inline">\(X^*_{1:n}\)</span> be a bootstrap sample, so that:
+<span class="math display">\[
+X^*_{i}|X_{1:n} \sim \widehat{Q}
+\]</span> and the error distribution for <span class="math inline">\(\widehat{\theta}\)</span> would be estimated as
+the conditional distribution for <span class="math inline">\(\widehat{\theta}^* - \widehat{\theta}\)</span>
+given <span class="math inline">\(X_{1:n}\)</span>, with <span class="math inline">\(\widehat{\theta}^*\)</span> being the parameter
+estimate from a single bootstrap sample.</p>
+<p>For example, consider the interval estimation of the mean of a normal
+distribution. Letting <span class="math inline">\(\lambda = (\theta,
+\sigma)\)</span>, <span class="math inline">\(\widehat{\lambda} =
+(\widehat{\mu}, \widehat{\sigma})\)</span>, with the standard estimates
+for <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(\mu\)</span>. We then obtain bootstrap estimates
+as: <span class="math display">\[
+\widehat{\mu}^*|X_{1:n} \sim N(\bar{X}_n, \widehat{\sigma}^2/n),
+\]</span> So the bootstrap confidence interval is: <span class="math display">\[
+\left(\bar{X}_n - Z_{\alpha/2}\frac{\widehat{\sigma}}{\sqrt{n}},
+\bar{X}_n + Z_{\alpha/2}\frac{\widehat{\sigma}}{\sqrt{n}}\right)
+\]</span></p>
 </div>
 <div id="hw-project-questions" class="slide section level2">
 <h1>HW / Project Questions</h1>

@@ -17,6 +17,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Announcments
 
+- Project 2: Due today 
+- Homework 2: Due Sunday 
+
 ## Boostrap: Formal Introduction
 
 Let $X_1, X_2, \ldots, X_n$ be i.i.d. random variables from some unknown distribution $Q$. 
@@ -28,7 +31,7 @@ $$
 $$
 where $\delta_x$ represents a point mass at $x$. 
 
-Note that $\widehat{Q}$ is a valid probability distribution; it is a discrete distribution that assigns mass $1/n$ to each data point $X_i$, and $\widehat{Q}$ is the proportion of these values that lie in $A$: 
+Note that $\widehat{Q}$ is a valid probability distribution; it is a discrete distribution that assigns mass $1/n$ to each data point $X_i$; for any set $A$, $\widehat{Q}(A)$ is the proportion of these values that lie in $A$: 
 $$
 \widehat{Q}(A) = \frac{1}{n}\left|\{i \leq n: X_i \in A\}\right|. 
 $$
@@ -132,7 +135,75 @@ And therefore the bias of the adjusted estimator is of order $1/n^2$, rather tha
 
 ## CLT and Boostrap Accuracy
 
+Bootstrap confidence intervals are so useful because they do not require many assumptions. 
+They also enable us to obtain confidence intervals when an analytic confidence intervals are intractable. 
+
+The important question that is worth considering is how well a boot-strap confidence interval actually is.
+Unfortunately it is difficult to make any statements about a general boot strap confidence interval.
+Fortunately, there are a few cases were we can make theoretical comparisons to other types of confidence intervals. 
+
+As before, assume $X_{1:n}$ are i.i.d. observations from any arbitrary distribution $Q$. 
+Consider estimating $\theta = E[X_i]$, letting $\widehat{\theta} = \bar{X}_{n}$.
+Furthermore, let $\sigma^2 = Var(X_i)$, and:
+$$
+\widehat{\sigma}^2 = \frac{1}{n}\sum_{i = 1}^n (X_i - \bar{X}_{n})^2,
+$$
+which is the variance of the empirical distribution $\widehat{Q}_n$.
+Finally, let $\gamma = E(X_i - \theta)^3$. 
+
+If
+$$
+Z_n = \frac{\sqrt{n}(\widehat{\theta} - \theta)^2}{\sigma},
+$$
+then by the CLT, $P(Z_n \leq x) = \Phi(x) + O\left(\frac{1}{\sqrt{n}}\right)$. 
+
+One way to prove the CLT is by the use of a second degree Taylor series approximation. 
+What happens if we approximate using an additional term of the Taylor polynomial?
+This is known as the *Edgeworth Expansion*, and gives a better approximation of the CLT: 
+$$
+P(Z_n \leq x) = \Phi(x) - \frac{\gamma(x^2 - 1)}{6\sigma^3\sqrt{n}}\phi(x) + o\left(\frac{1}{\sqrt{n}}\right)
+$$
+Obviously this isn't as useful as the CLT because it requires us to know $\gamma$ and $\sigma^3$, which are generally unknwon. 
+We can, however, use this to compare to the accuracy of the boot-strap estimator. 
+
+Let 
+$$
+Z_n^* = \frac{\sqrt{n}(\widehat{\theta}^* - \widehat{\theta})}{\widehat{\sigma}_n}.
+$$
+Theorem 19.4 of Theoretical Statistics: Topics for a Core Course (Robert Keener) gives the following result: 
+$$
+P(Z^*_n \leq x|X_{1:n}) = \Phi(x) - \frac{\gamma(x^2 - 1)}{6\sigma^3\sqrt{n}}\phi(x) + o_p\left(\frac{1}{\sqrt{n}}\right)
+$$
+
+What does this mean? 
+One implication is that the bootstrap estimate for the confidence interval of the estimate of the mean of a non-parametric distribution is an improvement over the CLT. 
+
+For more results on the performance of bootstrap estimates, see Chapter 19 of Keener. 
+
 ## Parametric Bootsrap 
+
+There are several different version of bootstrap confidence intervals. 
+One version is call the *parametric bootstrap*. 
+In this case, we assume the data are i.i.d. from a distribution $Q$ that is a member of a parametric family $\{Q_\lambda:\lambda \in \Lambda\}$, where $\Lambda$ is the set of possible parameter values. 
+
+Because in this case we know (or assume) the family of distribution of $Q$, our bootstrap distribution $\widehat{Q} = Q_{\widehat{\lambda}}$, where $\widehat{\lambda}$ is the maximum likelihood estimator of $\lambda$.
+Then, the approach is similar to before.
+Let $X^*_{1:n}$ be a bootstrap sample, so that:
+$$
+X^*_{i}|X_{1:n} \sim \widehat{Q}
+$$
+and the error distribution for $\widehat{\theta}$ would be estimated as the conditional distribution for $\widehat{\theta}^* - \widehat{\theta}$ given $X_{1:n}$, with $\widehat{\theta}^*$ being the parameter estimate from a single bootstrap sample. 
+
+For example, consider the interval estimation of the mean of a normal distribution.
+Letting $\lambda = (\theta, \sigma)$, $\widehat{\lambda} = (\widehat{\mu}, \widehat{\sigma})$, with the standard estimates for $\sigma^2$ and $\mu$. 
+We then obtain bootstrap estimates as:
+$$
+\widehat{\mu}^*|X_{1:n} \sim N(\bar{X}_n, \widehat{\sigma}^2/n),
+$$
+So the bootstrap confidence interval is: 
+$$
+\left(\bar{X}_n - Z_{\alpha/2}\frac{\widehat{\sigma}}{\sqrt{n}}, \bar{X}_n + Z_{\alpha/2}\frac{\widehat{\sigma}}{\sqrt{n}}\right)
+$$
 
 ## HW / Project Questions
 
