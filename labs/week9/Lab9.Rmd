@@ -330,6 +330,22 @@ For more details on how branches work, see [Chapter 3](https://git-scm.com/book/
 
 I highly recommend checking out [Chapter 3: branch merging](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging) for more info on merging. 
 
+## Additional Git topics
+
+These are topics that I have personally found very useful, in particular when developing R packages. 
+
+- [Tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging) 
+- [Aliases](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases)
+- [Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) (I sometimes use this to make many local commits, then [squash them](https://www.internalpointers.com/post/squash-commits-into-one-git) into a single commit when I push). 
+
+- GitHub topics: 
+   - Pull requests 
+   - [GitHub Actions](https://github.com/features/actions)
+   - [Signing your work](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work)
+   - [SSH](https://git-scm.com/book/en/v2/GitHub-Account-Setup-and-Configuration) 
+
+- Questions? Other things you want to learn about? 
+
 ## HW / Project Questions
 
 We will treat this time as an extra set of office hours. 
