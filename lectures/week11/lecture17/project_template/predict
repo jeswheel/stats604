@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import json
+import datetime
+import numpy as np
+
+CITIES = (
+    "PANC KBOI KORD KDEN KDTW PHNL KIAH KMIA KMIC KOKC KBNA "
+    "KARB KJFK KPHX KPWM KPDX KSLC KSAN KSFO KSEA KDCA"
+).split(" ")
+
+
+def main():
+    rng = np.random.default_rng(1)
+    days = [datetime.date.today() + datetime.timedelta(days=i) for i in range(1, 5)]
+    pred = {
+        city: {
+            str(day): dict(zip(["avg", "min", "max"], rng.normal(size=(3,))))
+            for day in days
+            } | {'rain': True, 'snow': False}
+
+        for city in CITIES
+    }
+    print(json.dumps(pred))
+
+
+if __name__ == "__main__":
+    main()
