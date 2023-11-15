@@ -1,0 +1,167 @@
+---
+title: "Week 9 Lab"
+output:
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+## Today's plan
+
+1. Announcements 
+1. Docker
+1. Reproducibility Questions
+1. HW / Project Questions 
+
+## Announcments
+
+1. HW 3: Due today 
+1. Project 4: Due Dec 3. 
+
+## Docker
+
+What is Docker? 
+
+- Docker is an growing, popular platform for building, running, and shipping code in a consistent manner, so that the code will run the same across various machines. 
+- This idea is similar to what we previously mentioned with `conda` and `renv`, this is another tool to use for this purpose. 
+- You will need to use Docker for Project 4. 
+
+- Docker helps use consistently build, run, and ship code. 
+- Many software jobs are looking for employees that know Docker. 
+
+Isolated environments are called containers. 
+You can run multiple applications at once. 
+
+## Virtual machine vs Container 
+
+- A virtual machine (VM) is an abstraction of a machine, meaning that it can be treated as it's own functioning computer environment. 
+   - The problem is that each VM needs a complete operating system installed
+   - This makes Virtual Machines slow to start, and they are resource intensive. 
+- A container is an isolated environment for running code / applications. 
+   - These also allow you to run multiple programs in isolation. 
+   - They are lightweight, not requiring running of an entire operating system.
+   - Need less time to start, and much less resources are required. 
+
+## Installing Docker  
+
+It's pretty straightforward to install Docker, just follow the instructions on this website: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).
+Once installed, you don't need to sign-up for a desktop version, but you can if you want. 
+
+## Typical Workflow 
+
+Create a directory that will contain all of the project code: 
+
+```
+mkdir hello-docker
+```
+
+Add all of your project code inside of this new directory.
+A simple example is the following: 
+
+```
+cd hello-docker
+vim hello-world.R
+
+# In the file: 
+cat("Hello World!")
+```
+
+Now we could typically run this code running the following: 
+
+```
+Rscript --vanilla hello-world.R
+```
+
+Rather than running the code via command line, let's create a Docker image. 
+To do this, we need to create a docker file. 
+Via command line, I use: 
+
+```
+vim Dockerfile 
+```
+
+Typically I will like to start with a *base image*, so I don't have to create the container from scratch. 
+There are a bunch of available images, that I will talk about later. 
+For now, we will just use the base image `r-base`. 
+To do this, in our Dockerfile, we include the command: 
+
+```
+FROM r-base
+```
+
+Note that the `r-base` image is built on a Linux distribution, so the image or container will contain some version of Linux, as well as a basic version of R without any packages. 
+We need to install this on our computer, which can be done using:
+
+```
+docker pull r-base
+```
+
+We can also specify the version of Linux if we care to do so, but it's usually safe to use the default. 
+
+In our image, we want to access all of the files in our directory.
+In this case, we want to access the `hello-world.R` script only, so we could specify this file, but here is how to include all files: 
+
+```
+COPY . /myrdoc
+```
+
+Here, `/myrdoc` is going to be a hidden, complex file system that will contain the entire image. `COPY . /myrdoc` tells Docker to copy all of the files in the current local directory into this hidden folder. 
+
+```
+CMD Rscript --vanilla hello-world.R
+```
+
+We have completed creating the file containing instructions on how to make the Docker image, but we haven't actually created that image. To do so, we run the command: 
+
+```
+docker build -t hello-docker .
+```
+
+`-t` stands for tag, it allows us to give the image a name: `hello-docker`. Then, I tell docker where to find the Dockerfile: `.`
+
+We can now check what Docker images exist on our computer using:
+
+```
+docker image ls
+```
+
+Here we see the `hello-docker` image, as well as some statistics. One example is size, which tells us the size of the image, which contains both a simple linux operating system, R, and the files that we put in the image. 
+
+We can now run the image: 
+
+```
+docker run hello-docker
+```
+
+This command should work on any computer (that has the image installed), and in any directory (because the image contains all of the information that it needs). 
+
+We can share the image with others using DockerHub, which is similar to GitHub for Docker images. 
+
+For more help, YouTube is a good source. In particular, I think that [this youtube video](https://www.youtube.com/watch?v=pTFZFxd4hOI) is a good starting point, especially from 17:50-27:20. 
+
+## Jonathan's example 
+
+Take a look at `lectures/week9/lecture14/Dockerfile` and see if we can make sense of it. 
+
+## Supplemental Docker + Makefile Slides 
+
+There are some supplemental slides on Docker and Makefiles that can be very useful. 
+They were developed to help students create a Docker image for project 4 last year, which I believe will have a similar requirement this year. 
+The slides are found in `labs/week12/Lab12-DockerSupplement.pdf` (big thanks to Charlotte Mann and Zoe Rehnberg for their work on this). 
+
+There is also a really nice free online course from MIT that includes a self-contained lecture on Makefiles: [https://missing.csail.mit.edu/2020/metaprogramming/](https://missing.csail.mit.edu/2020/metaprogramming/). 
+This is a good starting point if you are trying to learn about Makefiles. 
+
+## One final example 
+
+Interactively, let's try to replicate this example: https://www.r-bloggers.com/2019/02/running-your-r-script-in-docker/.
+
+## HW / Project Questions
+
+We will treat this time as an extra set of office hours. 
