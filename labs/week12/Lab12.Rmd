@@ -114,7 +114,7 @@ COPY . /myrdoc
 Here, `/myrdoc` is going to be a hidden, complex file system that will contain the entire image. `COPY . /myrdoc` tells Docker to copy all of the files in the current local directory into this hidden folder. 
 
 ```
-CMD Rscript --vanilla hello-world.R
+CMD Rscript --vanilla /myrdoc/hello-world.R
 ```
 
 We have completed creating the file containing instructions on how to make the Docker image, but we haven't actually created that image. To do so, we run the command: 
