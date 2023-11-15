@@ -21,7 +21,8 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 
 ## Announcments
 
-1. TODO
+1. HW 3: Due today 
+1. Project 4: Due Dec 3. 
 
 ## Docker
 
@@ -153,6 +154,9 @@ Take a look at `lectures/week9/lecture14/Dockerfile` and see if we can make sens
 There are some supplemental slides on Docker and Makefiles that can be very useful. 
 They were developed to help students create a Docker image for project 4 last year, which I believe will have a similar requirement this year. 
 The slides are found in `labs/week12/Lab12-DockerSupplement.pdf` (big thanks to Charlotte Mann and Zoe Rehnberg for their work on this). 
+
+There is also a really nice free online course from MIT that includes a self-contained lecture on Makefiles: [https://missing.csail.mit.edu/2020/metaprogramming/](https://missing.csail.mit.edu/2020/metaprogramming/). 
+This is a good starting point if you are trying to learn about Makefiles. 
 
 ## One final example 
 
