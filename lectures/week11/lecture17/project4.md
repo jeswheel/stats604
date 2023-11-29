@@ -83,7 +83,7 @@ toc-showtags: true
 	Honolulu        PHNL
 	Houston         KIAH
 	Miami           KMIA
-	Minneapolis     KMIC
+	Minneapolis     KMSP
 	Oklahoma City   KOKC
 	Nashville       KBNA
 	New York        KJFK
